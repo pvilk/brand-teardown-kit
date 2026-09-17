@@ -1,7 +1,16 @@
 {
   "name": "brand-teardown",
-  "version": "1.0.0",
-  "description": "Estimate how an early-stage DTC/CPG brand is performing from public sources: revenue run-rate by channel, stores verified store by store, units, funding, ads, social and team. Six parallel research agents plus a shareable report.",
-  "author": { "name": "Phil Vilk" },
-  "keywords": ["research", "dtc", "cpg", "retail", "tiktok-shop", "competitive-intelligence"]
+  "version": "1.1.0",
+  "description": "Estimate how an early-stage DTC/CPG brand is performing from public sources: revenue run-rate by channel, stores verified store by store, units, funding, full Meta and Google ad libraries, social and team. Six parallel research agents plus a shareable report.",
+  "author": {
+    "name": "Phil Vilk"
+  },
+  "keywords": [
+    "research",
+    "dtc",
+    "cpg",
+    "retail",
+    "tiktok-shop",
+    "competitive-intelligence"
+  ]
 }

@@ -35,7 +35,7 @@ Read the `adlib-page-resolver` skill (in this plugin) and the "Ads" section of `
 2. Google Ads Transparency: SearchCreatives for each domain × region, with a control domain.
 3. TikTok Creative Center top ads (opt-in, weak) and the EU library (expected empty outside Europe).
 4. Shopify `webPixelsConfigList` on each storefront: which ad pixels exist.
-If ads exist: per-ad start date, format, copy, CTA, landing page, days live, monthly launch curve, top angles with counts. If zero: prove it with controls and say what the zero cannot cover.
+If ads exist, pull the FULL libraries, not samples: follow the `ad-library-extractor` skill (Meta: every ad's copy + images into one file; add videos + transcripts if the user wants creative analysis) and the `google-ads-transparency-extractor` skill (Google: every creative, run dates, video files). Then report per-ad start date, format, copy, CTA, landing page, days live, the monthly launch curve and top angles with counts, and state coverage honestly (the Meta grid caps at a few hundred cards, sorted by impressions). If zero: prove it with controls and say what the zero cannot cover.
 
 ## 4. Storefront + marketplaces (file: storefront-retail.md, cap 20)
 1. Platform and stores: `/meta.json`, `/products.json?limit=250`, `/pages.json` on each regional store (au., us. subdomains). Hidden B2B SKUs give wholesale price, case pack and distributor. Created dates date the store.

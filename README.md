@@ -1,6 +1,6 @@
 # Brand Teardown kit for Claude Code
 
-A Claude Code plugin that teaches your Claude the workflow behind the Drizzy report: how a young consumer brand is really performing, from public sources only. It adds a `/brand-teardown` command and two skills. Your Claude reads them; you don't have to.
+A Claude Code plugin that teaches your Claude the workflow behind the Drizzy report: how a young consumer brand is really performing, from public sources only. It adds a `/brand-teardown` command and four skills. Your Claude reads them; you don't have to.
 
 ## Install (about 5 minutes)
 
@@ -17,12 +17,14 @@ A Claude Code plugin that teaches your Claude the workflow behind the Drizzy rep
    ```
    pip install curl_cffi playwright && playwright install chromium
    ```
+   For downloading and transcribing ad videos (optional): `yt-dlp`, `ffmpeg` and `pip install faster-whisper`.
 
 ## Use it
 
 - `/brand-teardown Drizzy getdrizzy.co`
 - "How is Olipop's new brand performing? How many stores are they in?"
 - "Re-run the Sprouts store check for Drizzy and compare it with last time."
+- "Pull David Protein's entire Meta and Google ad library, copy and images."
 
 **Give it the brand's website if the name is common or ambiguous.** Most bad first runs research the wrong company.
 
@@ -31,7 +33,7 @@ A full run launches six research agents in parallel and takes roughly 30 to 40 m
 ## Optional upgrades
 
 - **Claude in Chrome extension:** lets one agent read LinkedIn, the TikTok video grid and Google Trends in your logged-in browser. Without it, the kit uses no-login routes and gets less.
-- **A TikTok Shop analytics tool** (Euka's MCP, or Kalodata/FastMoss): daily TikTok Shop sales for any seller. Without it, the kit reads the public all-time "sold" count and you snapshot it over time.
+- **A TikTok Shop analytics tool** (Euka's MCP, or Kalodata/FastMoss): daily TikTok Shop sales for any seller. Euka needs your own Euka brand connected; its lookups run against that brand's market. Without it, the kit reads the public all-time "sold" count and you snapshot it over time.
 - **Artifact publishing:** if your Claude Code can publish Artifacts, the report becomes a shareable link. Otherwise you get a local HTML file.
 
 ## What's inside
@@ -49,6 +51,8 @@ brand-teardown-kit/
     scripts/                      store-locator puller, Sprouts store-by-store checker,
                                   run comparer, Meta / Google / TikTok ad checks
   skills/adlib-page-resolver/     finds a brand's real Meta Ad Library page
+  skills/ad-library-extractor/    pulls every Meta ad: full copy, images, optional videos + transcripts
+  skills/google-ads-transparency-extractor/  pulls every Google/YouTube ad, run dates, playable videos
   requirements.txt
 ```
 

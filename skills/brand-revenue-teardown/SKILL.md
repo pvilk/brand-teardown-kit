@@ -23,7 +23,7 @@ Setup once: `pip install curl_cffi playwright && playwright install chromium`.
 ## Step 1: TikTok Shop sales (the one real sales number)
 Read `$SKILL/references/scraping-recipes.md` section "TikTok Shop". Two routes:
 - **Free:** the public TikTok Shop product page returns an all-time `sold_count` to plain curl. One reading gives sales to date; a reading a week later gives a weekly run-rate.
-- **With a TikTok Shop analytics tool** (Euka, Kalodata, FastMoss): 30-day GMV, units and a daily sales curve for any seller. The first non-zero day is the shop's launch date.
+- **With a TikTok Shop analytics tool** (Euka, Kalodata, FastMoss): 30-day GMV, units and a daily sales curve for any seller. The first non-zero day is the shop's launch date. With Euka, first call `list_accessible_brands` to get your own `brandId`; every Social Intelligence call needs it, and your brand's TikTok Shop region sets the market searched.
 Check whether sales come from affiliate videos; if none are credited, sales come from shop ads, shop search or the brand's own posts.
 
 ## Step 2: fan out six agents in parallel (one message)
@@ -68,6 +68,7 @@ Always add:
 - `scripts/ads/google_ads_check.py --brand X --domain x.com --region US`: Google ads with a control domain.
 - `scripts/ads/tiktok_top_ads.py --term x --region US`: TikTok Creative Center top ads with a control term.
 - To find a brand's Meta page id first, use the `adlib-page-resolver` skill in this plugin.
+- **When the brand runs ads, pull the whole library:** the `ad-library-extractor` skill (every Meta ad's full copy, images, optional video downloads and transcripts) and the `google-ads-transparency-extractor` skill (every Google/YouTube creative, run dates, playable video files). The count scripts above only prove whether ads exist.
 
 ## Traps that cost the original run time
 - **Placeholder "intel" sites:** coherecommerce.com shows fake funding ("$1.7M Round A") and review text copied across brands. Never cite it.

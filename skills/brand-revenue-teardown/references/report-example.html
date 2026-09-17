@@ -1,0 +1,576 @@
+<title>Drizzy Teardown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root {
+  --ground: #fbfaf8;
+  --ink: #1d1b18;
+  --ink-2: #3b3732;
+  --muted: #6f6860;
+  --rule: #ddd6cc;
+  --rule-soft: #ece7df;
+  --accent: #5b3d8c;
+  --accent-line: #b7a6d3;
+  --warn: #8a5a12;
+  --serif: "Iowan Old Style", "Source Serif 4", Charter, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141316;
+    --ink: #ebe7e1;
+    --ink-2: #cfc9c1;
+    --muted: #a19a91;
+    --rule: #3b3740;
+    --rule-soft: #28252c;
+    --accent: #bca8e8;
+    --accent-line: #6a5a8c;
+    --warn: #e2b25e;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #141316;
+  --ink: #ebe7e1;
+  --ink-2: #cfc9c1;
+  --muted: #a19a91;
+  --rule: #3b3740;
+  --rule-soft: #28252c;
+  --accent: #bca8e8;
+  --accent-line: #6a5a8c;
+  --warn: #e2b25e;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.62;
+  padding-inline: 20px;
+  padding-block: 48px 96px;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 44rem; margin: 0 auto; }
+
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--accent-line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+strong { font-weight: 600; color: var(--ink); }
+
+.eyebrow, .label, th, .k, .tag, .toc a, .caption {
+  font-family: var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.eyebrow { font-size: 11px; color: var(--muted); margin: 0 0 20px; }
+
+header h1 {
+  font-size: clamp(56px, 12vw, 92px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.dek {
+  font-style: italic;
+  font-size: clamp(19px, 3.2vw, 23px);
+  line-height: 1.35;
+  color: var(--ink-2);
+  margin: 14px 0 0;
+  max-width: 32rem;
+  text-wrap: balance;
+}
+
+.answer {
+  margin: 44px 0 0;
+  padding-block: 22px 26px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.answer .label { font-size: 11px; color: var(--muted); margin: 0 0 6px; }
+.answer .big {
+  font-size: clamp(40px, 8vw, 58px);
+  line-height: 1.05;
+  color: var(--accent);
+  margin: 0;
+  font-variant-numeric: lining-nums;
+}
+.answer .range { margin: 8px 0 0; color: var(--ink-2); font-size: 17px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 18px 24px;
+  margin: 22px 0 0;
+}
+.stat .v { font-size: 26px; line-height: 1.1; font-variant-numeric: lining-nums; }
+.stat .k { font-size: 10.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+.lede p { margin: 0 0 14px; }
+.lede { margin-top: 36px; }
+.lede p:first-child::first-letter {
+  float: left;
+  font-size: 58px;
+  line-height: 0.82;
+  padding: 6px 8px 0 0;
+  color: var(--accent);
+}
+
+nav.toc { margin: 40px 0 0; padding-block: 16px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+nav.toc .label { font-size: 10.5px; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+nav.toc a { font-size: 11.5px; text-decoration: none; color: var(--ink-2); letter-spacing: 0.08em; }
+nav.toc a:hover { color: var(--accent); }
+
+section { margin-top: 72px; scroll-margin-top: 24px; }
+h2 {
+  font-size: clamp(28px, 5vw, 36px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+h2 .num { color: var(--muted); font-variant-numeric: lining-nums; margin-right: 0.3em; }
+.pull {
+  font-style: italic;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.45;
+  margin: 10px 0 26px;
+  max-width: 34rem;
+}
+h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 36px 0 10px;
+}
+p { margin: 0 0 14px; }
+ul { margin: 0 0 16px; padding-left: 1.2em; }
+li { margin-bottom: 8px; }
+li::marker { color: var(--muted); }
+
+section .stats { margin: 0 0 28px; padding-block: 16px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+.table-wrap { overflow-x: auto; margin: 18px 0 22px; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+th {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: left;
+  padding: 0 10px 8px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+td:last-child, th:last-child { padding-right: 0; }
+.n { text-align: right; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+tr.total td { border-top: 1px solid var(--ink); border-bottom: none; font-weight: 600; padding-top: 11px; }
+td.basis { color: var(--ink-2); font-size: 14px; min-width: 14rem; }
+.tag { font-size: 9.5px; color: var(--warn); letter-spacing: 0.1em; margin-left: 4px; white-space: nowrap; }
+.caption { font-size: 10px; color: var(--muted); margin: -12px 0 22px; letter-spacing: 0.08em; }
+
+.aside {
+  margin: 24px 0;
+  padding-block: 14px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-2);
+}
+.aside .label { font-size: 10.5px; color: var(--accent); margin: 0 0 6px; }
+.aside p:last-child { margin-bottom: 0; }
+
+.days { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 0 18px; margin: 18px 0 24px; font-variant-numeric: lining-nums tabular-nums; }
+.day { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule-soft); font-size: 15px; }
+.day span:first-child { color: var(--muted); }
+
+footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 15px; }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.85em; }
+
+@media (max-width: 480px) {
+  body { font-size: 16px; padding-block: 32px 72px; }
+  table { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Brand teardown · Public sources · September 16, 2026</p>
+  <h1>Drizzy</h1>
+  <p class="dek">How a two-person squeeze-bottle peanut butter brand is actually performing</p>
+
+  <div class="answer">
+    <p class="label">Annual revenue run-rate, gross</p>
+    <p class="big">About $0.5M a year</p>
+    <p class="range">Range $0.31M to $0.82M. Close to $1M if launch-promo demand at Sprouts holds. About $0.75M measured at shelf prices.</p>
+    <div class="stats">
+      <div class="stat"><div class="v">483</div><div class="k">Sprouts stores, checked one by one</div></div>
+      <div class="stat"><div class="v">~$580/day</div><div class="k">TikTok Shop sales since Sept 3</div></div>
+      <div class="stat"><div class="v">0</div><div class="k">Paid digital ads, ever</div></div>
+      <div class="stat"><div class="v">$0.6M to $2M</div><div class="k">Pre-seed raised, estimated</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="lede">
+  <p>Drizzy is running at roughly half a million dollars a year in gross revenue, five months after its first bottle shipped. That is brand revenue: what Drizzy bills its distributor plus what shoppers pay it online. Measured as money spent at the shelf, the same business is closer to $0.75M.</p>
+  <p>Two channels carry almost all of it. <strong>Sprouts Farmers Market</strong> lists it in 483 US stores, a chain-wide launch on August 24. <strong>TikTok Shop US</strong> opened on September 3 and has run at about $580 a day since. Australia is small by comparison: 32 stores and an online store that sold out its first production run in April.</p>
+  <p>They got here with no paid digital advertising, two viral TikTok recipe videos, a pre-seed round, and a team of two. The founders have never published revenue, units or the round size. Every number here is either pulled from a public record or built from one with the arithmetic shown.</p>
+  <p>The number that decides the next year is how many bottles each Sprouts store sells per week. Sprouts guarantees a new item six months on shelf, so its first real keep-or-cut decision lands around February 2027.</p>
+</div>
+
+<nav class="toc" aria-label="Contents">
+  <p class="label">Contents</p>
+  <ol>
+    <li><a href="#revenue">Revenue</a></li>
+    <li><a href="#retail">Retail</a></li>
+    <li><a href="#tiktok">TikTok Shop</a></li>
+    <li><a href="#funding">Funding</a></li>
+    <li><a href="#marketing">Marketing</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#watch">What to watch</a></li>
+    <li><a href="#timeline">Timeline</a></li>
+  </ol>
+</nav>
+
+<!-- Revenue -->
+<section id="revenue">
+  <h2>The revenue run-rate</h2>
+  <p class="pull">“We closed a pre-seed round before a single customer had the product in their hands.” Jason Spyrides, August 24</p>
+
+  <p>No single source gives Drizzy’s revenue, so the estimate is built channel by channel. Each row uses a different public signal, so the rows add up rather than check each other.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Channel</th><th>What it rests on</th><th class="n">Low</th><th class="n">Base</th><th class="n">High</th></tr></thead>
+      <tbody>
+        <tr><td>Sprouts, US</td><td class="basis">483 stores × published Sprouts sales per store (1.0 / 1.5 / 2.4 bottles a week) × $5.35 wholesale</td><td class="n">$134K</td><td class="n">$202K</td><td class="n">$322K</td></tr>
+        <tr><td>TikTok Shop, US</td><td class="basis">Actual daily sales, $582/day average, annualised; low case assumes decay to $300/day</td><td class="n">$110K</td><td class="n">$212K</td><td class="n">$284K</td></tr>
+        <tr><td>Australia online</td><td class="basis">“Loved by 1,000+” claim × 1.2 to 1.8 orders × A$30 to A$45 per order <span class="tag">Weak</span></td><td class="n">$57K</td><td class="n">$77K</td><td class="n">$192K</td></tr>
+        <tr><td>Australia stores</td><td class="basis">32 stores × the same sales range × assumed A$9 to A$9.75 wholesale <span class="tag">Weak</span></td><td class="n">$10K</td><td class="n">$15K</td><td class="n">$26K</td></tr>
+        <tr><td>US online store</td><td class="basis">No public signal: opened August 13, no reviews, no ad pixel</td><td class="n" colspan="3">Not estimated</td></tr>
+        <tr class="total"><td>Total</td><td></td><td class="n">~$311K</td><td class="n">~$506K</td><td class="n">~$824K</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>If Sprouts sells at a launch pace of 3.5 bottles per store per week, which the current sweepstakes and $1.50 price cut could produce for a few weeks, the Sprouts row becomes $470K and the total approaches $1M. Treat that as the ceiling for the promotion window, not a steady state.</p>
+
+  <h3>Why other estimates may look bigger</h3>
+  <ul>
+    <li><strong>Shelf dollars versus brand dollars.</strong> A bottle sells at Sprouts for $11.49 regular ($9.99 on promotion now), but Drizzy bills its distributor $5.35. Shelf figures run about 2.1 times brand revenue: base-case Sprouts sales are $433K at the shelf but $202K to Drizzy.</li>
+    <li><strong>Gross versus net.</strong> Everything here is gross. Sprouts takes the first case per store free (about $15.5K), and trade promotions, distributor fees and TikTok commissions all come off before Drizzy sees cash.</li>
+    <li><strong>The sales-per-store assumption.</strong> Each extra bottle per store per week at Sprouts adds about $134K a year to Drizzy, or $289K at the shelf. It is the only input that moves the total by a lot.</li>
+  </ul>
+
+  <h3>Revenue to date</h3>
+  <p>About <strong>$60K to $150K</strong> gross since pre-orders opened in February:</p>
+  <ul>
+    <li>Australia online: US$24K to $80K</li>
+    <li>Australian stores: about $5K to $16K</li>
+    <li>The one-time Sprouts stocking order: $23K to $47K gross, $8K to $31K after the free first case</li>
+    <li>TikTok Shop: $9.5K on 851 bottles</li>
+  </ul>
+</section>
+
+<!-- Retail -->
+<section id="retail">
+  <h2>Retail: stores, prices, units</h2>
+  <p class="pull">“On August 24, Drizzy will officially hit shelves in all 480+ Sprouts stores across the US.” Georgia Park, August 10</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">483</div><div class="k">Sprouts stores listing it</div></div>
+    <div class="stat"><div class="v">25</div><div class="k">US states</div></div>
+    <div class="stat"><div class="v">32</div><div class="k">Australian stores</div></div>
+    <div class="stat"><div class="v">$5.35</div><div class="k">Wholesale per bottle</div></div>
+  </div>
+
+  <h3>United States: nearly all of Sprouts, nothing else</h3>
+  <p>Drizzy’s own store locator lists 500 Sprouts addresses and no other US retailer. Sprouts reported <a href="https://theshelbyreport.com/2026/07/30/sprouts-sales-up-comps-down-in-2q-new-store-pace-to-grow-in-3q/">490 stores after Q2</a> with more opening since, so the listing covers essentially the whole chain. The founders round it to “<a href="https://www.linkedin.com/posts/jasonspyrides_4-months-ago-georgia-and-i-were-packing-activity-7497774744780447744-JMdX">500+ Sprouts Farmers Market stores</a>”.</p>
+  <p>Every Sprouts store was then checked individually through Sprouts’ own online shop. Of 499 locations, <strong>483 in all 25 states list Drizzy</strong>, every one at $9.99 on promotion from $11.49. <strong>None shows as low or out of stock</strong> three weeks after launch. <strong>16 stores don’t carry it</strong>, including Plano, Murphy and Bastrop in Texas and Costa Mesa in California; a control product worked at all 16. The brand’s locator is messier than it looks: 4 of its addresses are Sprouts distribution centres and 4 match no open store.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>State</th><th class="n">Stores</th><th>State</th><th class="n">Stores</th><th>State</th><th class="n">Stores</th></tr></thead>
+      <tbody>
+        <tr><td>California</td><td class="n">157</td><td>Nevada</td><td class="n">16</td><td>NC, NJ, PA, UT</td><td class="n">7 each</td></tr>
+        <tr><td>Texas</td><td class="n">63</td><td>Georgia</td><td class="n">15</td><td>Kansas, Virginia</td><td class="n">4 each</td></tr>
+        <tr><td>Florida</td><td class="n">60</td><td>Oklahoma</td><td class="n">11</td><td>AL, DE, MO, WA</td><td class="n">3 each</td></tr>
+        <tr><td>Arizona</td><td class="n">51</td><td>New Mexico</td><td class="n">9</td><td>New York, S. Carolina</td><td class="n">2 each</td></tr>
+        <tr><td>Colorado</td><td class="n">31</td><td>Maryland, Tennessee</td><td class="n">8 each</td><td>Louisiana, Wyoming</td><td class="n">1 each</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption">Stores listing Drizzy on Sprouts’ own shop, checked September 16, 2026</p>
+
+  <p>How they got in matters. Georgia Park credits the Sprouts merchandiser who “<a href="https://www.linkedin.com/posts/georgiaparkcreative_now-that-our-us-secrets-finally-out-i-can-activity-7492701358350008320-ZCyE">found us from our very first TikTok post</a>”. The listing came from inbound discovery, not a sales broker.</p>
+
+  <h3>Australia: independents on purpose</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Retailer</th><th class="n">Stores</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Harris Farm Markets</td><td class="n">23</td><td>20 on Drizzy’s locator plus 3 Harris Farm marks available; A$14.99. Added <a href="https://insidefmcg.com.au/2026/08/17/drizzys-squeezable-format-lands-in-harris-farm-markets/">August 2026</a></td></tr>
+        <tr><td>Maloney’s Grocer</td><td class="n">4</td><td>“<a href="https://www.linkedin.com/posts/jasonspyrides_we-sold-out-across-all-4-maloneys-stores-activity-7457229485872939008-lFPz">Sold out across all 4 Maloneys stores in a matter of days</a>” (May 5)</td></tr>
+        <tr><td>Common Supply, LaManna, Tully’s, Peaches, The Herdsman</td><td class="n">5</td><td>Common Supply was the <a href="https://www.linkedin.com/posts/jasonspyrides_drizzy-just-landed-its-first-retailer-australia-activity-7454635502491803669-WvvU">first retailer</a> (April 28)</td></tr>
+        <tr class="total"><td>Total</td><td class="n">32</td><td>Up to 40 if 9 more priced Harris Farm stores stock it</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Not in Woolworths or Coles. Woolworths’ product search returns zero results for Drizzy, and <a href="https://retailworldmagazine.com.au/drizzy-drops-a-squeezable-peanut-butter/">Retail World</a> reports the brand chose independents “rather than major supermarket chains”.</p>
+
+  <h3>Prices and trade terms</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Item</th><th class="n">Price</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Sprouts shelf, 19.4 oz</td><td class="n">$11.49 reg · $9.99 now</td><td>Sprouts online shop, per store</td></tr>
+        <tr><td>Drizzy to KeHE (distributor), case of 6</td><td class="n">$32.10 = $5.35 ea</td><td>A hidden “KeHE Case Pack” product in <a href="https://getdrizzy.co/products.json">Drizzy’s US store data</a></td></tr>
+        <tr><td>Food-service case of 6</td><td class="n">$37.50 = $6.25 ea</td><td>Same</td></tr>
+        <tr><td>Drizzy US online</td><td class="n">$9.99</td><td>Up to 17% off at 6; free shipping at $49.99</td></tr>
+        <tr><td>TikTok Shop US</td><td class="n">$12.99 list · $11.22 avg</td><td>TikTok Shop listing; Euka sales data</td></tr>
+        <tr><td>Australia online, 550 g</td><td class="n">A$14.95 · 2 for A$28.95</td><td><a href="https://au.getdrizzy.co/products.json">Drizzy’s Australian store data</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>KeHE is a natural-grocery distributor and almost certainly how bottles reach Sprouts. Sprouts’ <a href="https://about.sprouts.com/vendor-policies-2/">vendor policies</a> require a free fill for every new store and give free-filled items “guaranteed placement for a minimum of six months”.</p>
+
+  <h3>Units: what can and can’t be seen</h3>
+  <p>No public source shows bottles sold at any retailer. Sprouts’ shop hides purchase counts and has no reviews for Drizzy, and nobody involved has published a number. So units are bracketed from published benchmarks. Per <a href="https://business.socialnature.com/how-to-exceed-buyer-expectations-at-sprouts/">Social Nature</a>, the average Sprouts condiment sells <strong>2.4 units per store per week</strong> and a new item usually starts at <strong>1.3 to 1.5</strong>. Else Nutrition, a real Sprouts launch in another category, <a href="https://www.stocktitan.net/news/BABYF/sprouts-farmers-market-adds-else-kids-nutrition-products-to-its-j3kfsjhi1ea6.html">reached 1.2 after ten months</a>.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Sprouts, 483 stores</th><th class="n">Low (1.0)</th><th class="n">Base (1.5)</th><th class="n">High (2.4)</th></tr></thead>
+      <tbody>
+        <tr><td>Bottles per week</td><td class="n">483</td><td class="n">725</td><td class="n">1,159</td></tr>
+        <tr><td>Bottles per year</td><td class="n">25,116</td><td class="n">37,674</td><td class="n">60,278</td></tr>
+        <tr><td>Bottles sold since launch (3.3 weeks)</td><td class="n">1,589</td><td class="n">2,384</td><td class="n">3,814</td></tr>
+        <tr><td>Shopper spend per year at $11.49</td><td class="n">$289K</td><td class="n">$433K</td><td class="n">$693K</td></tr>
+        <tr class="total"><td>Drizzy revenue per year at $5.35</td><td class="n">$134K</td><td class="n">$202K</td><td class="n">$322K</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li><strong>The initial stocking order</strong> was a one-off: 1 to 2 cases per store plus distributor stock, about 4,350 to 8,700 bottles. That is $23K to $47K gross, or $8K to $31K after the free first case.</li>
+    <li><strong>For scale:</strong> TikTok Shop sold 588 bottles in its first 12 days, about 340 a week, which is roughly half the Sprouts base case from a single online channel.</li>
+    <li><strong>Australia</strong> at the same sales range is 1,700 to 4,000 bottles a year across 32 stores, about A$15K to A$39K to Drizzy. There’s no Australian benchmark or wholesale price, so treat it as a rough size.</li>
+  </ul>
+</section>
+
+<!-- TikTok -->
+<section id="tiktok">
+  <h2>TikTok Shop</h2>
+  <p class="pull">The only channel where actual daily sales are visible from outside the company</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">Sept 3</div><div class="k">First sale</div></div>
+    <div class="stat"><div class="v">851</div><div class="k">Bottles sold to date</div></div>
+    <div class="stat"><div class="v">~$580</div><div class="k">Sales per day</div></div>
+    <div class="stat"><div class="v">4.8</div><div class="k">Stars, 17 reviews</div></div>
+  </div>
+
+  <p>Euka, a TikTok Shop analytics platform, tracks sales for every seller. Drizzy’s US shop, one product, made its first sale on <strong>September 3</strong> and held $450 to $780 a day after that: <strong>$6,599 on 588 bottles</strong> through September 14. The public product page shows 780 sold on the product and 851 shop-wide, a little above Euka’s count, which stops two days earlier.</p>
+
+  <div class="days" aria-label="Daily TikTok Shop sales, September 2026">
+    <div class="day"><span>Sep 3</span><span>$200</span></div>
+    <div class="day"><span>Sep 4</span><span>$599</span></div>
+    <div class="day"><span>Sep 5</span><span>$598</span></div>
+    <div class="day"><span>Sep 6</span><span>$500</span></div>
+    <div class="day"><span>Sep 7</span><span>$547</span></div>
+    <div class="day"><span>Sep 8</span><span>$509</span></div>
+    <div class="day"><span>Sep 9</span><span>$451</span></div>
+    <div class="day"><span>Sep 10</span><span>$715</span></div>
+    <div class="day"><span>Sep 11</span><span>$584</span></div>
+    <div class="day"><span>Sep 12</span><span>$588</span></div>
+    <div class="day"><span>Sep 13</span><span>$530</span></div>
+    <div class="day"><span>Sep 14</span><span>$779</span></div>
+  </div>
+
+  <p>List price is $12.99, but buyers paid $11.22 on average, about 14% off through coupons. A creator count found 41 affiliate videos from 27 creators since August 29; the biggest is <a href="https://www.tiktok.com/@ka.devore/video/7679896813570215198">@ka.devore at 137K views</a>.</p>
+
+  <div class="aside">
+    <p class="label">Open question</p>
+    <p>None of the top 20 creator videos in Euka’s data is credited with a sale, yet sales held at ~$580 a day from day two. They are coming from somewhere else: TikTok’s own shop ads (which appear in no public ad library), shop search, Drizzy’s own posts, or its four livestreams. Paid promotion is unconfirmed.</p>
+  </div>
+</section>
+
+<!-- Funding -->
+<section id="funding">
+  <h2>Money raised and company structure</h2>
+  <p class="pull">“We were fortunate to have investors reach out who believed in what we were building.” Georgia Park, July 27</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">$0.6M to $2M</div><div class="k">Pre-seed, estimated</div></div>
+    <div class="stat"><div class="v">$66,875</div><div class="k">Only amount on file</div></div>
+    <div class="stat"><div class="v">3</div><div class="k">Named investors</div></div>
+  </div>
+
+  <p>The pre-seed was announced July 28 by Drizzy’s law firm, <a href="https://www.foley.com/news/2026/07/foley-represents-drizzy-in-us-structuring-and-pre-seed-funding/">Foley &amp; Lardner</a>, backed by RiverPark Ventures, Nucleus Ventures and Alexis Ohanian. No amount was given anywhere. Three public records narrow it down:</p>
+  <ul>
+    <li><strong>An SEC filing for a single-deal investor pool.</strong> “<a href="https://www.sec.gov/Archives/edgar/data/2130422/000213042226000001/primary_doc.xml">Drizzy SPV Apr 2026</a>” raised $66,875 from 13 accredited investors (first sale April 28). Nucleus Ventures runs deals this way and <a href="https://www.entrepreneur.com/entrepreneurs/warm-introductions-nucleus-network-jake-michael">lists Drizzy in its portfolio</a>, so it is most likely theirs.</li>
+    <li><strong>The lead’s stated cheque size.</strong> <a href="https://riverparkvc.com/">RiverPark Ventures</a> says its first cheque is $500K to $1.5M, and lists Drizzy in its <a href="https://riverparkvc.com/portfolio/">portfolio</a>.</li>
+    <li><strong>RiverPark’s office on the import paperwork.</strong> Drizzy’s US company received its first shipment addressed to 156 W 56th St, 17th floor, New York, which is <a href="https://www.riverparkfunds.com/">RiverPark’s office</a>. That points to RiverPark as lead.</li>
+  </ul>
+  <p>RiverPark’s minimum plus the pool plus Ohanian gives more than about $0.57M, which makes $0.6M to $2M the plausible band. It is an estimate, not a disclosed figure.</p>
+
+  <div class="aside">
+    <p class="label">Discard</p>
+    <p>Cohere Commerce shows a “$1.7M Round A” for Drizzy. It is placeholder text: the identical line appears on its Olipop and Poppi pages, and the page’s own data lists funding as zero.</p>
+  </div>
+
+  <h3>Companies</h3>
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr><td>Drizzy Pty Limited</td><td>Australia. Registered <a href="https://abr.business.gov.au/ABN/View?abn=76693064916">November 20, 2025</a>, Bondi postcode. Owns all trademarks.</td></tr>
+        <tr><td>Drizzy Holdings Inc.</td><td>US parent. Delaware corporation formed March 29, 2026; registered in New York August 14. The US label reads “Manufactured for Drizzy Holdings, Inc., Miami, FL”.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Supply chain</h3>
+  <ul>
+    <li><strong>US bottles:</strong> one container of empty bottles and caps from Xiamen, China, landed <a href="https://www.importyeti.com/company/drizzy-holdings">June 10</a> (3,567 kg, 332 cartons), roughly 75,000 to 130,000 bottles at an assumed weight each. That is many times the Sprouts stocking order.</li>
+    <li><strong>US product:</strong> an unnamed co-packer, “100% American ingredients”, Texas-grown Runner peanuts per <a href="https://www.thefoundergazette.com/stories/sydney-peanut-butter-reaches-490-sprouts-stores-in-nine-mont">Founder Gazette</a>.</li>
+    <li><strong>Australian peanuts:</strong> from <a href="https://www.broadsheet.com.au/national/food-and-drink/article/drizzy-peanut-butter">Kingaroy, Queensland</a>. Manufacturer not named.</li>
+  </ul>
+
+  <h3>Trademarks</h3>
+  <ul>
+    <li><strong>The US name is on hold.</strong> <a href="https://tsdr.uspto.gov/statusview/sn99672270">DRIZZY</a> was suspended July 1. Garnea LLC filed <a href="https://tsdr.uspto.gov/statusview/sn99636482">DRIZZ</a> for nut butters three weeks before Drizzy and is the likely cause (the examiner’s letter was unreadable).</li>
+    <li><strong>No new product lines.</strong> Every filing in both countries covers nut butters only.</li>
+  </ul>
+</section>
+
+<!-- Marketing -->
+<section id="marketing">
+  <h2>Marketing: zero ads, two viral videos</h2>
+  <p class="pull">“We didn’t want to put any paid marketing behind it and sought real, organic feedback.” Jason Spyrides, May 6</p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">0</div><div class="k">Meta ads, ever</div></div>
+    <div class="stat"><div class="v">0</div><div class="k">Google ads</div></div>
+    <div class="stat"><div class="v">7.6M</div><div class="k">Views on top TikTok</div></div>
+    <div class="stat"><div class="v">83%</div><div class="k">Of TikTok views from 2 videos</div></div>
+  </div>
+
+  <h3>Paid media</h3>
+  <ul>
+    <li><strong>Meta:</strong> <a href="https://www.facebook.com/ads/library/?active_status=all&amp;ad_type=all&amp;country=ALL&amp;is_targeted_country=false&amp;media_type=all&amp;search_type=page&amp;view_all_page_id=994505917081830">Drizzy’s Ad Library page</a> shows zero ads in any country, active or ended, and no boosted posts. The same check pulled all 56 ads from a control brand.</li>
+    <li><strong>Google:</strong> zero ads for either Drizzy site in any region.</li>
+    <li><strong>TikTok:</strong> zero in TikTok’s public top-ads gallery, which is opt-in, so weak evidence.</li>
+    <li><strong>Tracking code:</strong> the Australian store has a Meta pixel; the US store has none three weeks after launch, so a US social ad campaign couldn’t be measured today.</li>
+    <li><strong>The one paid item:</strong> a Times Square billboard in late July, used as a <a href="https://1800dtc.substack.com/p/1800hotline-030-1b-with-zero-dilution">news moment</a>.</li>
+  </ul>
+
+  <h3>Organic social</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Platform</th><th class="n">Followers</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://www.tiktok.com/@getdrizzypeanuts">TikTok</a></td><td class="n">3,053</td><td>951K likes, 69 videos, 12.35M views; median video 4,421</td></tr>
+        <tr><td><a href="https://www.instagram.com/getdrizzy/">Instagram</a></td><td class="n">10.7K</td><td>48 reels since May, 5.58M views; top reel 2.6M</td></tr>
+        <tr><td>Facebook</td><td class="n">6.3K</td><td>0 reviews</td></tr>
+        <tr><td><a href="https://www.linkedin.com/company/drizzypeanuts/">LinkedIn</a></td><td class="n">1,230</td><td>2 company posts; the founders’ own posts do the work</td></tr>
+        <tr><td>Reddit, X</td><td class="n">n/a</td><td>0 Reddit mentions; 7 X posts, all investors or trade press</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The viral moment</h3>
+  <p>The press line of “<a href="https://greekherald.com.au/news/jason-spyrides-turns-peanut-butter-idea-into-viral-success/">more than 7.5 million TikTok views</a>” is essentially one video: the <a href="https://www.tiktok.com/@getdrizzypeanuts/video/7617440415666441490">strawberry stars recipe</a>, posted March 15, with 7.6M views, 769K likes and 113K shares. It went viral during Australian pre-orders, a month before any bottle shipped. The follow-up <a href="https://www.tiktok.com/@getdrizzypeanuts/video/7625963889527753991">rice cake stacks</a> reached 2.6M. No brand video since has passed 180K.</p>
+  <p>It spread by accident. The strawberries looked like the Stranger Things Demogorgon: the top comment has 26.8K likes, and 265 of 419 sampled comments tag a friend. Only 8 asked what the product was. The reach landed the Sprouts buyer but not a lasting audience: 3,053 followers against 951K likes.</p>
+</section>
+
+<!-- Team -->
+<section id="team">
+  <h2>The team</h2>
+  <p class="pull">“Somehow, through all of that, the Drizzy team is still just us two.” Jason Spyrides, August 24</p>
+
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr><td><a href="https://www.linkedin.com/in/jasonspyrides/">Jason Spyrides</a><br><span class="caption">Co-founder</span></td><td>29, UNSW commerce. Product designer and manager at Wagestream and Humanforce. Built Weanie, a small quit-smoking app. Now in New York. “<a href="https://www.linkedin.com/posts/jasonspyrides_4-months-ago-georgia-and-i-were-packing-activity-7497774744780447744-JMdX">We didn’t have a background in food, a CPG playbook or a big team.</a>”</td></tr>
+        <tr><td><a href="https://www.linkedin.com/in/georgiaparkcreative/">Georgia Park</a><br><span class="caption">Co-founder</span></td><td>Creative strategist at Swan Studio; community and content manager at AKQA (Volvo, Red Rooster, Officeworks). Likely runs the content that went viral.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li><strong>No employees, no hiring:</strong> zero job posts and no careers page.</li>
+    <li><strong>Everything else is outsourced:</strong> co-packer, distributor, warehouse and TikTok affiliates, run by two people across two countries.</li>
+    <li><strong>Visible investor support:</strong> Alexis Ohanian posted about a Drizzy x David Protein pop-up in New York (27K views); Nucleus’ Jake Fleshner posted “We invested in Drizzy.”</li>
+  </ul>
+</section>
+
+<!-- Watch -->
+<section id="watch">
+  <h2>What to watch</h2>
+  <p class="pull">The launch is funded and on shelf. The next six months decide whether it stays there.</p>
+
+  <h3>Risks</h3>
+  <ul>
+    <li><strong>Sprouts sales after the promotion.</strong> The sweepstakes ends September 20 and the price cut is temporary. By about February 2027 the item should be heading toward the 2.4 condiment average; from a 1.5 base that is a 60% lift, with no paid ads and no US pixel.</li>
+    <li><strong>The viral engine has stalled.</strong> March and April produced 83% of all TikTok views, and TikTok Shop sales aren’t coming from creator videos yet.</li>
+    <li><strong>The US name.</strong> The DRIZZY trademark is suspended, with an earlier “DRIZZ” nut butter filing in the way.</li>
+    <li><strong>Two people.</strong> A national US launch, an Australian business, TikTok Shop and all content, run by the founders alone.</li>
+    <li><strong>Cash.</strong> A container of bottles, a US co-packer, free product for 483 stores, a billboard and a move to the US, funded by a pre-seed of perhaps $0.6M to $2M.</li>
+  </ul>
+
+  <h3>Cheap checks to repeat</h3>
+  <ul>
+    <li><strong>Sprouts stock, store by store.</strong> A saved script re-checks all 499 stores in about 11 minutes. Run it after September 20 and again two weeks later; stores selling out and restocking are the best public read on real sales.</li>
+    <li><strong>TikTok Shop daily sales</strong> on Euka.</li>
+    <li><strong>A first Meta ad</strong> on Drizzy’s page, or a Meta pixel appearing on the US store. Either means they’ve started paying for customers.</li>
+    <li><strong>New stores and an Amazon listing.</strong> A hidden “Amazon 3PKs” product already exists in the US store.</li>
+  </ul>
+</section>
+
+<!-- Timeline -->
+<section id="timeline">
+  <h2>Timeline</h2>
+  <p class="pull">From domain registration to 483 stores in eleven months</p>
+  <div class="table-wrap">
+    <table>
+      <tbody>
+        <tr><td class="n">Oct 17, 2025</td><td>getdrizzy.co registered; TikTok account created Oct 26</td></tr>
+        <tr><td class="n">Nov 20, 2025</td><td>Drizzy Pty Limited registered in Australia</td></tr>
+        <tr><td class="n">Feb 18, 2026</td><td>Australian pre-orders open at A$14.95</td></tr>
+        <tr><td class="n">Mar 15, 2026</td><td>Strawberry stars TikTok goes viral (7.6M views)</td></tr>
+        <tr><td class="n">Mar 29, 2026</td><td>Drizzy Holdings Inc. formed in Delaware</td></tr>
+        <tr><td class="n">April 2026</td><td>First bottles ship; first run sells out in three weeks; Common Supply, then Maloney’s</td></tr>
+        <tr><td class="n">Apr 28, 2026</td><td>Investor pool raises $66,875 from 13 investors</td></tr>
+        <tr><td class="n">Jun 10, 2026</td><td>US bottles and caps land, addressed care of RiverPark</td></tr>
+        <tr><td class="n">Jul 1, 2026</td><td>US DRIZZY trademark suspended</td></tr>
+        <tr><td class="n">Jul 22 to 28</td><td>NYC pop-up with David Protein; Times Square billboard; pre-seed announced</td></tr>
+        <tr><td class="n">Aug 13 to 19</td><td>US online store built; Harris Farm listing</td></tr>
+        <tr><td class="n">Aug 24, 2026</td><td>Sprouts launch across the chain; sweepstakes runs to Sep 20</td></tr>
+        <tr><td class="n">Sep 3, 2026</td><td>First TikTok Shop US sale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Looked for, not found</h3>
+  <ul>
+    <li>Revenue, units, customers, repeat rate or round size from the founders, press or any filing</li>
+    <li>Founder podcasts or video interviews; US trade press coverage</li>
+    <li>An SEC Form D for the company itself, or any crowdfunding</li>
+    <li>Co-packer names; reviews on either store; an Amazon listing; site traffic data</li>
+    <li>Nut-butter-specific sales benchmarks at Sprouts (paid data only)</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Built from public sources on September 16, 2026: press and founder posts, SEC and company registries, import records, ad libraries, both Drizzy online stores, social profiles, a store-by-store check of Sprouts, and TikTok Shop sales data from Euka. Estimates are labelled with the inputs they rest on.</p>
+</footer>
+
+</div>

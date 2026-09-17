@@ -1,0 +1,16 @@
+{
+  "name": "brand-teardown-kit",
+  "owner": {
+    "name": "Phil Vilk"
+  },
+  "metadata": {
+    "description": "Brand revenue teardown for young consumer brands, packaged for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "brand-teardown",
+      "source": "./",
+      "description": "Brand revenue teardown: six research agents, store-by-store retail checks, revenue table, shareable report."
+    }
+  ]
+}
